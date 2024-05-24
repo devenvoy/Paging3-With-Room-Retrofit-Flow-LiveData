@@ -1,23 +1,32 @@
 package com.example.paging3withroomdemo.data.model
 
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
+@Entity(tableName = "quote")
 data class Result(
+
     @SerializedName("author")
-    val author: String?,
+    val author: String,
     @SerializedName("authorSlug")
-    val authorSlug: String?,
+    val authorSlug: String,
     @SerializedName("content")
-    val content: String?,
+    val content: String,
     @SerializedName("dateAdded")
-    val dateAdded: String?,
+    val dateAdded: String,
     @SerializedName("dateModified")
-    val dateModified: String?,
+    val dateModified: String,
+
+    @PrimaryKey(autoGenerate = false)
     @SerializedName("_id")
-    val id: String?,
+    val id: String,
+
     @SerializedName("length")
-    val length: Int?,
+    val length: Int,
     @SerializedName("tags")
-    val tags: List<String?>?
-)
+    val tags: List<String>,
+) {
+    constructor() : this("", "", "", "", "", "", 0, listOf())
+}
