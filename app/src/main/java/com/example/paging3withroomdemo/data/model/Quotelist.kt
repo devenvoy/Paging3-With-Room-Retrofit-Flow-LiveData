@@ -5,15 +5,17 @@ import com.google.gson.annotations.SerializedName
 
 data class Quotelist(
     @SerializedName("count")
-    val count: Int?,
+    val count: Int,
     @SerializedName("lastItemIndex")
-    val lastItemIndex: Int?,
+    val lastItemIndex: Int,
     @SerializedName("page")
-    val page: Int?,
+    val page: Int,
     @SerializedName("results")
-    val results: List<Result>,
+    val quoteResults: List<QuoteResult>,
     @SerializedName("totalCount")
-    val totalCount: Int?,
+    val totalCount: Int,
     @SerializedName("totalPages")
-    val totalPages: Int?
-)
+    val totalPages: Int,
+) {
+    constructor() : this(0, 0, 0, listOf(), 0, 0)
+}

@@ -3,11 +3,17 @@ package com.example.paging3withroomdemo.presentation.activity
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.loader.content.Loader
+import androidx.paging.ExperimentalPagingApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.paging3withroomdemo.data.viewModel.QuoteViewModel
 import com.example.paging3withroomdemo.databinding.ActivityMainBinding
-import com.example.paging3withroomdemo.presentation.adapter.QuotePagingAdapter
+import com.example.paging3withroomdemo.paging.adapter.LoaderAdpater
+import com.example.paging3withroomdemo.paging.adapter.QuotePagingAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
+@ExperimentalPagingApi
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
@@ -28,7 +34,10 @@ class MainActivity : AppCompatActivity() {
             quotesRv.apply {
                 layoutManager =
                     LinearLayoutManager(this@MainActivity, LinearLayoutManager.VERTICAL, false)
-                adapter = quoteAdapter
+                adapter = quoteAdapter.withLoadStateHeaderAndFooter(
+                    header = LoaderAdpater(),
+                    footer = LoaderAdpater()
+                )
                 setHasFixedSize(true)
             }
         }

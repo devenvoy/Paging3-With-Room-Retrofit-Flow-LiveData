@@ -1,11 +1,11 @@
-package com.example.paging3withroomdemo.presentation.adapter
+package com.example.paging3withroomdemo.paging.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.paging3withroomdemo.data.model.Result
+import com.example.paging3withroomdemo.data.model.QuoteResult
 import com.example.paging3withroomdemo.databinding.ItemQuoteLayoutBinding
 
 
@@ -13,14 +13,27 @@ import com.example.paging3withroomdemo.databinding.ItemQuoteLayoutBinding
 // our adapter will hold Comparator using constructor
 // we will define type of data objects and ViewHolder inside this class type
 class QuotePagingAdapter :
-    PagingDataAdapter<Result, QuotePagingAdapter.QuoteViewHolder>(diffCallback = diffCallback) {
+    PagingDataAdapter<QuoteResult, QuotePagingAdapter.QuoteViewHolder>(diffCallback = Comparator()) {
 
-    class QuoteViewHolder(val binding: ItemQuoteLayoutBinding) :
+    class QuoteViewHolder(private val binding: ItemQuoteLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun onBind(item: Result) {
+        fun onBind(item: QuoteResult) {
             binding.apply {
                 quoteTv.text = item.content
             }
+        }
+    }
+
+    override fun onBindViewHolder(
+        holder: QuoteViewHolder,
+        position: Int,
+        payloads: MutableList<Any>,
+    ) {
+        if (payloads.isNullOrEmpty()) {
+            super.onBindViewHolder(holder, position, payloads)
+        } else {
+            val newItem = payloads[0] as QuoteResult
+            holder.onBind(newItem)
         }
     }
 
@@ -39,17 +52,14 @@ class QuotePagingAdapter :
         )
     }
 
-    companion object {
-        val diffCallback = object : DiffUtil.ItemCallback<Result>() {
-            override fun areItemsTheSame(oldItem: Result, newItem: Result): Boolean {
-                return oldItem.id == newItem.id
-            }
+    class Comparator : DiffUtil.ItemCallback<QuoteResult>() {
+        override fun areItemsTheSame(oldItem: QuoteResult, newItem: QuoteResult): Boolean {
+            return oldItem.id == newItem.id
+        }
 
-            override fun areContentsTheSame(oldItem: Result, newItem: Result): Boolean {
-                return oldItem == newItem
-            }
+        override fun areContentsTheSame(oldItem: QuoteResult, newItem: QuoteResult): Boolean {
+            return oldItem == newItem
         }
     }
-
 
 }
