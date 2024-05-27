@@ -14,8 +14,8 @@ import javax.inject.Inject
 // here we will define Pager
 @ExperimentalPagingApi
 class QuoteRepository @Inject constructor(
-    val quoteApi: QuoteApi,
-    val quoteDatabase: QuoteDatabase,
+    private val quoteApi: QuoteApi,
+    private val quoteDatabase: QuoteDatabase,
 ) {
 
     // we need repository to provide data
@@ -24,8 +24,15 @@ class QuoteRepository @Inject constructor(
 
     fun getQuotes() = Pager(
         // one page has 20 records and it will hold maximum 100 records in memory then it will drop old
-        config = PagingConfig(pageSize = 20, maxSize = 100),
-        remoteMediator = QuoteRemoteMediater(quoteApi,quoteDatabase),
+        config = PagingConfig(
+            pageSize = 20,
+            maxSize = 100
+        ),
+
+        // remote mediator object need to pass to get data for database
+        remoteMediator = QuoteRemoteMediater(quoteApi, quoteDatabase),
+
+        // here instead pulling data from api we are pulling from database
         pagingSourceFactory = { quoteDatabase.getQuoteDao().getQuotes() }
     ).liveData
 
